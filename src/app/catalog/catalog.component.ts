@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IProduct } from './product.module';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'bot-catalog',
@@ -11,7 +12,7 @@ export class CatalogComponent {
   products: IProduct[];
   filter: string = '';
 
-  constructor(){
+  constructor(private _carSvc: CartService){
     this.products =[
       {
         id: 1,
@@ -189,8 +190,8 @@ export class CatalogComponent {
     ];
   }
 
-  getImageUrl(product:IProduct){
-    return '/assets/images/robot-parts/' + product.imageName;
+  addToCart(product: IProduct){
+    this._carSvc.add(product)
   }
 
   getFilterProducts(){
@@ -198,10 +199,4 @@ export class CatalogComponent {
       ? this.products
       : this.products.filter((product) => product.category === this.filter);
   }
-
-  getDiscountedClasses(product: IProduct){
-    if(product.discount > 0) return ['strikethrough'];
-    else return ['',''];
-  }
-
 }
